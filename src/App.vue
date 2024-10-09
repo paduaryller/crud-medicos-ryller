@@ -151,113 +151,113 @@
 </script>
 
 <style scoped>
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-.doctor-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
-}
+  .doctor-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
 
-.form-checkbox {
-  display: flex;
-  flex-direction: row;
-}
+  .form-checkbox {
+    display: flex;
+    flex-direction: row;
+  }
 
-input[type="text"], input[type="checkbox"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-}
+  input[type="text"], input[type="checkbox"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
 
-input[type="checkbox"] {
-  width: auto;
-}
+  input[type="checkbox"] {
+    width: auto;
+  }
 
-.submit-btn {
-  padding: 10px 15px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-}
+  .submit-btn {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
 
-.submit-btn:hover {
-  background-color: #218838;
-}
+  .submit-btn:hover {
+    background-color: #218838;
+  }
 
-.doctor-list {
-  list-style-type: none;
-  padding: 0;
-}
+  .doctor-list {
+    list-style-type: none;
+    padding: 0;
+  }
 
-.doctor-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  background-color: #f9f9f9;
-}
+  .doctor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+  }
 
-.actions {
-  display: flex;
-  gap: 10px;
-}
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
 
-.edit-btn,
-.delete-btn {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  .edit-btn,
+  .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-.edit-btn {
-  background-color: #007bff;
-  color: white;
-}
+  .edit-btn {
+    background-color: #007bff;
+    color: white;
+  }
 
-.edit-btn:hover {
-  background-color: #0056b3;
-}
+  .edit-btn:hover {
+    background-color: #0056b3;
+  }
 
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-}
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
 
-.delete-btn:hover {
-  background-color: #c82333;
-}
+  .delete-btn:hover {
+    background-color: #c82333;
+  }
 
-.filter-section {
-  margin-top: 20px;
-}
+  .filter-section {
+    margin-top: 20px;
+  }
 
-.no-doctors-message {
-  text-align: center;
-  color: #666;
-  margin: 20px 0;
-}
+  .no-doctors-message {
+    text-align: center;
+    color: #666;
+    margin: 20px 0;
+  }
 </style>
