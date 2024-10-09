@@ -50,104 +50,104 @@
 </template>
 
 <script>
-export default {
-  // Definindo dados reativos para o componente
-  data() {
-    return {
-      // Objeto para armazenar os dados do médico
-      doctor: {
-        name: '',  // Nome do médico
-        crm: '',  // Número do CRM
-        uf: '',  // Estado do CRM (UF)
-        active: false,  // Status se o médico está ativo ou não
-      },
-      doctors: [],  // Lista de médicos
-      editMode: false,  // Flag para indicar se estamos no modo de edição
-      editIndex: null,  // Índice do médico que está sendo editado
-      showActiveOnly: false,  // Flag para filtrar médicos ativos
-    };
-  },
-  computed: {
-    // Computed property para filtrar médicos ativos se a flag estiver ativa
-    filteredDoctors() {
-      // Se a flag 'showActiveOnly' estiver ativa, filtra a lista de médicos para retornar apenas os ativos
-      if (this.showActiveOnly) {
-        return this.doctors.filter(doctor => doctor.active);
+  export default {
+    // Definindo dados reativos para o componente
+    data() {
+      return {
+        // Objeto para armazenar os dados do médico
+        doctor: {
+          name: '',  // Nome do médico
+          crm: '',  // Número do CRM
+          uf: '',  // Estado do CRM (UF)
+          active: false,  // Status se o médico está ativo ou não
+        },
+        doctors: [],  // Lista de médicos
+        editMode: false,  // Flag para indicar se estamos no modo de edição
+        editIndex: null,  // Índice do médico que está sendo editado
+        showActiveOnly: false,  // Flag para filtrar médicos ativos
+      };
+    },
+    computed: {
+      // Computed property para filtrar médicos ativos se a flag estiver ativa
+      filteredDoctors() {
+        // Se a flag 'showActiveOnly' estiver ativa, filtra a lista de médicos para retornar apenas os ativos
+        if (this.showActiveOnly) {
+          return this.doctors.filter(doctor => doctor.active);
+        }
+        // Se não, retorna todos os médicos
+        return this.doctors;
       }
-      // Se não, retorna todos os médicos
-      return this.doctors;
-    }
-  },
-  methods: {
-    // Método para adicionar ou atualizar médico na lista
-    saveDoctor() {
-      // Se estamos no modo de edição, atualiza o médico existente
-      if (this.editMode) {
-        this.doctors[this.editIndex] = { ...this.doctor };
-      } else {
-        // Caso contrário, adiciona um novo médico à lista
-        this.doctors.push({ ...this.doctor });
-      }
-      // Reseta o formulário após salvar
-      this.resetForm();
-      // Salva a lista atual de médicos no localStorage
-      this.saveToLocalStorage();
     },
-    // Método para editar um médico
-    editDoctor(index) {
-      // Armazena o índice do médico que será editado
-      this.editIndex = index;
-      // Carrega os dados do médico selecionado para o formulário
-      this.doctor = { ...this.doctors[index] };
-      // Ativa o modo de edição
-      this.editMode = true;
-    },
-    // Método para deletar um médico
-    deleteDoctor(index) {
-      // Remove o médico da lista usando o índice
-      this.doctors.splice(index, 1);
-      // Salva a lista atualizada no localStorage
-      this.saveToLocalStorage();
-    },
-    // Método para resetar o formulário
-    resetForm() {
-      // Limpa os dados do médico no formulário
-      this.doctor = { name: '', crm: '', uf: '', active: false };
-      // Desativa o modo de edição
-      this.editMode = false;
-      // Limpa o índice do médico sendo editado
-      this.editIndex = null;
-    },
-    // Método para salvar a lista de médicos no localStorage
-    saveToLocalStorage() {
-      // Armazena a lista de médicos convertida em string no localStorage
-      localStorage.setItem('doctors', JSON.stringify(this.doctors));
-    },
-    // Método para carregar médicos do localStorage ao montar o componente
-    loadFromLocalStorage() {
-      // Tenta obter os dados dos médicos do localStorage
-      const doctorsData = localStorage.getItem('doctors');
-      // Se os dados existirem, converte a string em um objeto e armazena na lista de médicos
-      if (doctorsData) {
-        this.doctors = JSON.parse(doctorsData);
-      }
-    }
-  },
-  mounted() {
-    // Carrega a lista de médicos do localStorage quando o componente é montado
-    this.loadFromLocalStorage();
-  },
-  watch: {
-    // Observar mudanças na lista de médicos
-    doctors: {
-      handler() {
-        // Salva a lista atualizada no localStorage sempre que houver mudanças
+    methods: {
+      // Método para adicionar ou atualizar médico na lista
+      saveDoctor() {
+        // Se estamos no modo de edição, atualiza o médico existente
+        if (this.editMode) {
+          this.doctors[this.editIndex] = { ...this.doctor };
+        } else {
+          // Caso contrário, adiciona um novo médico à lista
+          this.doctors.push({ ...this.doctor });
+        }
+        // Reseta o formulário após salvar
+        this.resetForm();
+        // Salva a lista atual de médicos no localStorage
         this.saveToLocalStorage();
       },
-      deep: true,  // Observa mudanças profundas (em objetos dentro da lista)
+      // Método para editar um médico
+      editDoctor(index) {
+        // Armazena o índice do médico que será editado
+        this.editIndex = index;
+        // Carrega os dados do médico selecionado para o formulário
+        this.doctor = { ...this.doctors[index] };
+        // Ativa o modo de edição
+        this.editMode = true;
+      },
+      // Método para deletar um médico
+      deleteDoctor(index) {
+        // Remove o médico da lista usando o índice
+        this.doctors.splice(index, 1);
+        // Salva a lista atualizada no localStorage
+        this.saveToLocalStorage();
+      },
+      // Método para resetar o formulário
+      resetForm() {
+        // Limpa os dados do médico no formulário
+        this.doctor = { name: '', crm: '', uf: '', active: false };
+        // Desativa o modo de edição
+        this.editMode = false;
+        // Limpa o índice do médico sendo editado
+        this.editIndex = null;
+      },
+      // Método para salvar a lista de médicos no localStorage
+      saveToLocalStorage() {
+        // Armazena a lista de médicos convertida em string no localStorage
+        localStorage.setItem('doctors', JSON.stringify(this.doctors));
+      },
+      // Método para carregar médicos do localStorage ao montar o componente
+      loadFromLocalStorage() {
+        // Tenta obter os dados dos médicos do localStorage
+        const doctorsData = localStorage.getItem('doctors');
+        // Se os dados existirem, converte a string em um objeto e armazena na lista de médicos
+        if (doctorsData) {
+          this.doctors = JSON.parse(doctorsData);
+        }
+      }
+    },
+    mounted() {
+      // Carrega a lista de médicos do localStorage quando o componente é montado
+      this.loadFromLocalStorage();
+    },
+    watch: {
+      // Observar mudanças na lista de médicos
+      doctors: {
+        handler() {
+          // Salva a lista atualizada no localStorage sempre que houver mudanças
+          this.saveToLocalStorage();
+        },
+        deep: true,  // Observa mudanças profundas (em objetos dentro da lista)
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
