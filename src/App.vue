@@ -134,8 +134,29 @@
       }
     },
     mounted() {
-      // Carrega a lista de médicos do localStorage quando o componente é montado
-      this.loadFromLocalStorage();
+      // Limpar localStorage para testes (opcional, use durante a depuração)
+      // localStorage.clear();
+
+      // Verificar se já há médicos no localStorage
+      const doctorsData = localStorage.getItem('doctors');
+
+      if (!doctorsData || doctorsData === "[]") {
+        // Se não houver dados, inicializar com médicos fictícios
+        this.doctors = [
+          { name: 'Dr. João Silva', crm: '12345', uf: 'SP', active: true },
+          { name: 'Dra. Maria Santos', crm: '67890', uf: 'RJ', active: false },
+          { name: 'Dra. Joana Bernardes', crm: '99579', uf: 'PE', active: true},
+          { name: 'Dr. Ricardo Pinto', crm: '33569', uf: 'RS', active: true},
+          { name: 'Dr. Carlos Oliveira', crm: '54321', uf: 'MG', active: true }
+        ];
+        this.saveToLocalStorage(); // Salvar a lista no localStorage
+      } else {
+        // Se houver dados no localStorage, carregar
+        this.loadFromLocalStorage();
+      }
+
+      console.log("Médicos carregados:", this.doctors); // Para depuração
+
     },
     watch: {
       // Observar mudanças na lista de médicos
