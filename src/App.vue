@@ -2,19 +2,11 @@
   <v-app>
     <v-container>
       <!-- Componente DoctorTable -->
-      <doctor-table
-      ></doctor-table>
-
+      <DoctorTable />
     </v-container>
   </v-app>
 </template>
 
-<script>
+<script setup>
 import DoctorTable from './components/DoctorTable.vue';
-
-export default {
-  components: {
-    DoctorTable,
-  },
-};
 </script>

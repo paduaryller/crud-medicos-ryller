@@ -12,7 +12,7 @@
         <doctor-form-dialog
           :dialog="dialog"
           :doctor="localDoctor"
-          @update:dialog="dialog = $event"
+          @update:dialog="(val) => dialog = val"
           @save-doctor="saveDoctor"
         />
         <v-dialog v-model="dialogDelete" max-width="500px">
@@ -61,31 +61,33 @@ export default {
   components: {
     DoctorFormDialog,
   },
-  data: () => ({
-    dialog: false,
-    dialogDelete: false,
-    headers: [
-      { title: 'Nome', value: 'name', align: 'start', sortable: true },
-      { title: 'CRM', value: 'crm', sortable: true },
-      { title: 'UF', value: 'uf', sortable: true },
-      { title: 'Ativo', value: 'active', sortable: true },
-      { title: 'Ações', value: 'actions', sortable: false },
-    ],
-    doctors: [],
-    editedIndex: -1,
-    localDoctor: {
-      name: '',
-      crm: '',
-      uf: '',
-      active: false,
-    },
-    defaultItem: {
-      name: '',
-      crm: '',
-      uf: '',
-      active: false,
-    },
-  }),
+  data() {
+    return {
+      dialog: false,
+      dialogDelete: false,
+      headers: [
+        { title: 'Nome', key: 'name', align: 'start', sortable: true },
+        { title: 'CRM', key: 'crm', sortable: true },
+        { title: 'UF', key: 'uf', sortable: true },
+        { title: 'Ativo', key: 'active', sortable: true },
+        { title: 'Ações', key: 'actions', sortable: false },
+      ],
+      doctors: [],
+      editedIndex: -1,
+      localDoctor: {
+        name: '',
+        crm: '',
+        uf: '',
+        active: false,
+      },
+      defaultItem: {
+        name: '',
+        crm: '',
+        uf: '',
+        active: false,
+      },
+    };
+  },
 
   created() {
     this.initialize();
@@ -113,17 +115,14 @@ export default {
         ];
         this.saveToLocalStorage();
       } else {
-        // Se houver dados no localStorage, carregar
         this.loadFromLocalStorage();
       }
     },
 
     saveDoctor(doctor) {
       if (this.editedIndex > -1) {
-        // Atualiza o médico existente
         Object.assign(this.doctors[this.editedIndex], doctor);
       } else {
-        // Adiciona um novo médico
         this.doctors.push(doctor);
       }
       this.saveToLocalStorage();
@@ -138,10 +137,14 @@ export default {
       this.doctors = JSON.parse(localStorage.getItem('doctors'));
     },
 
-    editItem(item) {
-      this.localDoctor = { ...item };
-      this.editedIndex = this.doctors.indexOf(item);
+    editItem(localDoctor) {
+      this.editedIndex = this.doctors.indexOf(localDoctor);
+      this.localDoctor = { ...localDoctor };
       this.dialog = true;
+      console.log("Index", this.editedIndex);
+      console.log("Doctor", this.localDoctor);
+      console.log(this.dialog);
+
     },
 
     deleteItem(item) {
@@ -153,7 +156,7 @@ export default {
     close() {
       this.dialog = false;
       this.editedIndex = -1;
-      this.localDoctor = { ...this.defaultItem }; // Resetar localDoctor
+      this.localDoctor = { ...this.defaultItem };
     },
 
     closeDelete() {
@@ -163,7 +166,7 @@ export default {
     deleteItemConfirm() {
       this.doctors.splice(this.editedIndex, 1);
       if (this.doctors.length === 0) {
-        localStorage.removeItem('doctors'); // Remove o item do localStorage se não houver médicos
+        localStorage.removeItem('doctors');
       } else {
         this.saveToLocalStorage();
       }
@@ -172,8 +175,9 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-  .v-card-title {
-    text-align: center;
-  }
+.v-card-title {
+  text-align: center;
+}
 </style>
