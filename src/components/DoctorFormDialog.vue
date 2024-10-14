@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { ref, defineComponent, toRefs } from 'vue';
+import { ref, defineComponent, toRefs, watch } from 'vue';
 
 
 export default defineComponent({
@@ -71,16 +71,16 @@ export default defineComponent({
       handleClose();
     };
 
-    // // Watcher para quando a prop dialog mudar, abrir ou fechar o diálogo
-    // watch(dialog, (newVal) => {
-    //   isDialogOpen.value = newVal;
-    //   isEditMode.value = !!doctor.value.name;
-    //   if (newVal) {
-    //     localDoctor.value = { ...doctor.value };
-    //   } else {
-    //     resetLocalDoctor();
-    //   }
-    // });
+    // Watcher para quando a prop dialog mudar, abrir ou fechar o diálogo
+    watch(dialog, (newVal) => {
+      isDialogOpen.value = newVal;
+      isEditMode.value = !!doctor.value.name;
+      if (newVal) {
+        localDoctor.value = { ...doctor.value };
+      } else {
+        resetLocalDoctor();
+      }
+    });
 
     return {
       isDialogOpen,
