@@ -10,50 +10,25 @@
           <v-toolbar-title>Gerenciamento de médicos</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
+
           <v-dialog v-model="dialog" max-width="500">
             <template #activator="{ props }">
               <v-btn class="mb-2" color="primary" dark v-bind="props">
                 Adicionar Médico
               </v-btn>
             </template>
+
             <v-card>
               <v-card-title class="text-h5">
                 {{ isEditMode ? 'Visualizar Médico' : 'Criar Médico' }}
               </v-card-title>
               <v-card-text>
                 <v-form ref="form" @submit.prevent="submitForm">
-                  <v-text-field
-                    v-model="localDoctor.name"
-                    label="Nome"
-                    :disabled="isEditMode"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="localDoctor.crm"
-                    label="CRM"
-                    :disabled="isEditMode"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="localDoctor.crmUf"
-                    label="Estado (UF)"
-                    :disabled="isEditMode"
-                    required
-                  ></v-text-field>
-                  <v-select
-                    v-model="localDoctor.type"
-                    :items="types"
-                    label="Tipo"
-                    :disabled="isEditMode"
-                    required
-                  ></v-select>
-                  <v-select
-                    v-model="localDoctor.status"
-                    :items="statuses"
-                    label="Status"
-                    :disabled="isEditMode"
-                    required
-                  ></v-select>
+                  <v-text-field v-model="localDoctor.name" label="Nome" :disabled="isEditMode" required />
+                  <v-text-field v-model="localDoctor.crm" label="CRM" :disabled="isEditMode" required />
+                  <v-text-field v-model="localDoctor.crmUf" label="Estado (UF)" :disabled="isEditMode" required />
+                  <v-select v-model="localDoctor.type" :items="types" label="Tipo" :disabled="isEditMode" required />
+                  <v-select v-model="localDoctor.status" :items="statuses" label="Status" :disabled="isEditMode" required />
                   <v-autocomplete
                     v-model="localDoctor.specialties"
                     :items="specialties"
@@ -61,17 +36,13 @@
                     multiple
                     :disabled="isEditMode"
                     required
-                  ></v-autocomplete>
+                  />
                 </v-form>
               </v-card-text>
 
               <v-card-actions>
-                <v-btn color="grey" @click="handleClose">Fechar</v-btn>
-                <v-btn
-                  v-if="!isEditMode"
-                  color="primary"
-                  @click="submitForm"
-                >Salvar</v-btn>
+                <v-btn color="grey" @click="closeDialog">Fechar</v-btn>
+                <v-btn v-if="!isEditMode" color="primary" @click="submitForm">Salvar</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -82,14 +53,8 @@
                 Deseja excluir {{ localDoctor.name }}?
               </v-card-title>
               <v-card-actions>
-                <v-spacer></v-spacer>
                 <v-btn color="grey" variant="text" @click="closeDelete">Cancelar</v-btn>
-                <v-btn
-                  color="primary"
-                  variant="text"
-                  @click="deleteItemConfirm"
-                >OK</v-btn>
-                <v-spacer></v-spacer>
+                <v-btn color="primary" variant="text" @click="deleteItemConfirm">OK</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -103,12 +68,8 @@
           <td>{{ item.crmUf }}</td>
           <td>{{ item.status }}</td>
           <td>
-            <v-icon class="me-2" size="small" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon size="small" @click="deleteItem(item)">
-              mdi-delete
-            </v-icon>
+            <v-icon class="me-2" size="small" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon size="small" @click="deleteItem(item)">mdi-delete</v-icon>
           </td>
         </tr>
       </template>
@@ -120,7 +81,6 @@
   </div>
 </template>
 
-
 <script>
 import { ref } from 'vue';
 import { createDoctor, validateDoctor } from '@/network/services/doctorService';
@@ -130,15 +90,11 @@ export default {
     const dialog = ref(false);
     const dialogDelete = ref(false);
     const isEditMode = ref(false);
-    const localDoctor = ref({
-      name: '',
-      crm: '',
-      crmUf: '',
-      type: '',
-      status: '',
-      specialties: [],
-    });
+    const localDoctor = ref(resetDoctor());
     const doctors = ref([]);
+    const types = ['Principal', 'Secundária'];
+    const statuses = ['Ativo', 'Cancelado'];
+    const specialties = [];
     const headers = [
       { title: 'Nome', value: 'name' },
       { title: 'CRM', value: 'crm' },
@@ -146,25 +102,26 @@ export default {
       { title: 'Status', value: 'status' },
       { title: 'Ações', value: 'actions', sortable: false },
     ];
-    const types = ['Principal', 'Secundária'];
-    const statuses = ['Ativo', 'Cancelado'];
-    const specialties = [ ];
+
+    function resetDoctor() {
+      return { name: '', crm: '', crmUf: '', type: '', status: '', specialties: [] };
+    }
 
     const submitForm = async () => {
       try {
         await createDoctor(localDoctor.value);
         alert('Médico criado com sucesso!');
         doctors.value.push({ ...localDoctor.value });
-        handleClose();
+        closeDialog();
       } catch (error) {
         alert(`Erro ao criar médico: ${error}`);
       }
     };
 
-    const handleClose = () => {
+    const closeDialog = () => {
       dialog.value = false;
       isEditMode.value = false;
-      localDoctor.value = { name: '', crm: '', crmUf: '', type: '', status: '', specialties: [] };
+      localDoctor.value = resetDoctor();
     };
 
     const editItem = async (item) => {
@@ -177,14 +134,7 @@ export default {
     const fetchDoctorData = async (crm, crmUf) => {
       try {
         const doctorData = await validateDoctor(crm, crmUf);
-        localDoctor.value = {
-        name: doctorData.doctorName || localDoctor.value.name,
-        crm: doctorData.crm || localDoctor.value.crm,
-        crmUf: doctorData.crmUf || localDoctor.value.crmUf,
-        type: doctorData.type || localDoctor.value.type,
-        status: doctorData.status || localDoctor.value.status,
-        specialties: doctorData.specialties || localDoctor.value.specialties, // Garantindo que specialties seja um array
-      };
+        Object.assign(localDoctor.value, doctorData);
         alert('Médico validado com sucesso!');
       } catch (error) {
         alert(`Erro ao validar médico: ${error}`);
@@ -202,7 +152,7 @@ export default {
       statuses,
       specialties,
       submitForm,
-      handleClose,
+      closeDialog,
       editItem,
     };
   },
