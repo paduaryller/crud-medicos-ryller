@@ -83,18 +83,13 @@
 
 <script>
 import { ref } from 'vue';
-import { createDoctor, validateDoctor } from '@/network/services/doctorService';
+import { useDoctorStore } from '@/stores/doctorStore';
 
 export default {
   setup() {
+    const doctorStore = useDoctorStore();
     const dialog = ref(false);
     const dialogDelete = ref(false);
-    const isEditMode = ref(false);
-    const localDoctor = ref(resetDoctor());
-    const doctors = ref([]);
-    const types = ['Principal', 'Secundária'];
-    const statuses = ['Ativo', 'Cancelado'];
-    const specialties = [];
     const headers = [
       { title: 'Nome', value: 'name' },
       { title: 'CRM', value: 'crm' },
@@ -103,15 +98,10 @@ export default {
       { title: 'Ações', value: 'actions', sortable: false },
     ];
 
-    function resetDoctor() {
-      return { name: '', crm: '', crmUf: '', type: '', status: '', specialties: [] };
-    }
-
     const submitForm = async () => {
       try {
-        await createDoctor(localDoctor.value);
+        await doctorStore.addDoctor(doctorStore.localDoctor);
         alert('Médico criado com sucesso!');
-        doctors.value.push({ ...localDoctor.value });
         closeDialog();
       } catch (error) {
         alert(`Erro ao criar médico: ${error}`);
@@ -120,37 +110,19 @@ export default {
 
     const closeDialog = () => {
       dialog.value = false;
-      isEditMode.value = false;
-      localDoctor.value = resetDoctor();
+      doctorStore.resetLocalDoctor();
     };
 
-    const editItem = async (item) => {
-      isEditMode.value = true;
-      localDoctor.value = { ...item };
+    const editItem = (item) => {
+      doctorStore.setEditMode(item);
       dialog.value = true;
-      await fetchDoctorData(item.crm, item.crmUf);
-    };
-
-    const fetchDoctorData = async (crm, crmUf) => {
-      try {
-        const doctorData = await validateDoctor(crm, crmUf);
-        Object.assign(localDoctor.value, doctorData);
-        alert('Médico validado com sucesso!');
-      } catch (error) {
-        alert(`Erro ao validar médico: ${error}`);
-      }
     };
 
     return {
       dialog,
       dialogDelete,
-      isEditMode,
-      localDoctor,
-      doctors,
+      ...doctorStore,
       headers,
-      types,
-      statuses,
-      specialties,
       submitForm,
       closeDialog,
       editItem,
