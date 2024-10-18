@@ -1,3 +1,4 @@
+// src/stores/doctorStore.js
 
 import { defineStore } from 'pinia';
 import { createDoctor, validateDoctor } from '@/network/services/doctorService';
@@ -25,7 +26,8 @@ export const useDoctorStore = defineStore('doctor', {
         this.doctors.push({ ...doctorData });
         this.resetLocalDoctor();
       } catch (error) {
-        throw error;
+        console.error('Erro ao adicionar o médico:', error);  // Tratar erro de forma útil
+        throw new Error('Não foi possível adicionar o médico.'); // Retornar erro com mensagem útil
       }
     },
 
@@ -34,7 +36,8 @@ export const useDoctorStore = defineStore('doctor', {
         const doctorData = await validateDoctor(crm, crmUf);
         Object.assign(this.localDoctor, doctorData);
       } catch (error) {
-        throw error;
+        console.error('Erro ao validar o médico:', error);  // Tratar erro de forma útil
+        throw new Error('Não foi possível validar o médico.'); // Retornar erro com mensagem útil
       }
     },
 
